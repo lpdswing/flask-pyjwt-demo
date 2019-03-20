@@ -7,9 +7,6 @@ from .extensions import config_extensions, db
 from .commands import *
 
 
-
-
-
 def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
@@ -31,8 +28,19 @@ def create_app(config_name=None):
         return response
 
     app.cli.command()(initdb) #注册初始化db命令 使用flask initdb
-
+    config_blueprint(app)
 
     return app
+
+# 注册蓝本
+from .users import auth as auth_api
+
+DEFAULT_BLUEPRINT = (
+    (auth_api, '/auth'),
+)
+
+def config_blueprint(app):
+    for blueprint, prefix in DEFAULT_BLUEPRINT:
+        app.register_blueprint(blueprint, url_prefix=prefix)
 
 from app import common
