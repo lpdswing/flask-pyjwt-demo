@@ -71,9 +71,9 @@ class Auth():
                 u.login_time = login_time
                 Users.update(u)
                 token = self.encode_auth_token(u.id, login_time)
-                return jsonify(common.trueReturn(token.decode(), '登录成功'))
+                return common.trueReturn(token.decode(), '登录成功')
             else:
-                return jsonify(common.falseReturn('', '密码错误'))
+                return common.falseReturn('', '密码错误')
 
     def identify(self, request):
         """

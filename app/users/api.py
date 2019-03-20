@@ -16,8 +16,12 @@ class User():
         user = Users(username=dic['username'],password=Users().set_password(dic['password']),email=dic['email'])
         result = Users().add(user)
         if user.id:
-            returnUser = dict(user)
-            returnUser.pop('password')
+            returnUser = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'login_time': user.login_time
+            }
             return common.trueReturn(returnUser, '用户注册成功')
         else:
             return common.falseReturn('', '用户注册失败')
@@ -41,7 +45,12 @@ class User():
         result = Auth().identify(request)
         if result['status'] and result['data']:
             user = Users().get(result['data'])
-            returnUser = dict(user).pop('password')
-            res = common.trueReturn(returnUser, '请求成功')
-            return res
+            returnUser = {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'login_time': user.login_time
+            }
+            result = common.trueReturn(returnUser, '请求成功')
+        return result
 
