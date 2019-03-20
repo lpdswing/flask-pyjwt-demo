@@ -3,6 +3,7 @@
 import os
 from flask import Flask, request
 from .config import config
+from .extensions import config_extensions
 
 
 
@@ -14,6 +15,7 @@ def create_app(config_name=None):
 
     app = Flask(__name__)
     app.config.from_object(config[config_name])
+    config_extensions(app)
 
     # 处理全局Http请求头,允许跨域
     # 这里使用Cors插件更方便
