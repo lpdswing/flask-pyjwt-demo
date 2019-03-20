@@ -3,7 +3,8 @@
 import os
 from flask import Flask, request
 from .config import config
-from .extensions import config_extensions
+from .extensions import config_extensions, db
+from .commands import *
 
 
 
@@ -13,7 +14,7 @@ def create_app(config_name=None):
     if config_name is None:
         config_name = os.getenv('FLASK_CONFIG', 'development')
 
-    app = Flask(__name__)
+    app = Flask('app')
     app.config.from_object(config[config_name])
     config_extensions(app)
 
@@ -28,4 +29,10 @@ def create_app(config_name=None):
             if headers:
                 response.headers['Access-Control-Allow-Headers'] = headers
         return response
+
+    app.cli.command()(initdb) #注册初始化db命令 使用flask initdb
+
+
     return app
+
+from app import common
